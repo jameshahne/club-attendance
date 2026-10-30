@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: club-hours
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    # One worker on purpose: the meeting state and attendance cache live in memory.
+    startCommand: cd backend && gunicorn --workers 1 --threads 4 -b 0.0.0.0:$PORT app.main:app
+    envVars:
+      - key: SHEET_ID
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: ADMIN_NAMES
+        sync: false
+      - key: DEMO_PIN
+        sync: false # a PIN for the Demo account, or the word: off
+      - key: JWT_SECRET
+        generateValue: true
+      - key: TRUST_PROXY
+        value: "true"
+      - key: TIMEZONE
+        value: America/Chicago

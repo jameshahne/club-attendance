@@ -1,0 +1,6 @@
+flask==3.*
+gunicorn==23.*
+gspread==6.*
+PyJWT==2.*
+python-dotenv==1.*
+tzdata
