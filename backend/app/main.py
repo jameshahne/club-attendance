@@ -310,8 +310,15 @@ def admin_meeting():
 def admin_start():
     if g.user.get("demo"):
         _demo["meeting"] = True
+        _demo["since"] = sheets.now().strftime("%H:%M:%S")
     else:
+        was_active = bool(meeting.state().get("active"))
         meeting.start(g.user["name"])
+        if not was_active:
+            try:
+                sheets.check_in(g.user["name"])
+            except ValueError:
+                pass
     return jsonify(_meeting_payload())
 
 
